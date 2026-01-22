@@ -1,0 +1,72 @@
+When data gets bigger like in Terabyte or even say like petabyte we need to introduce Big data. 
+
+Hadoop works on distributed storage and parallel processing.Data is stored across multiple machines.
+
+For distributed data on different systems.
+1) Hadoop architecture : 
+2) Spark architecture
+
+Hadoop Components: HDFS (Hadoop Distributed File System)- Stores large data across multiple nodes.Data is split into blocks and replicated.
+
+Name node and data nodes:Name node basically holds the meta data of where or which file is getting stored. 
+Basically a master and slaves concept.
+So namenode(master) and Datanode (slaves)
+NameNode – stores metadata.
+DataNode – stores actual data
+
+Inside the Hadoop architecture it also follows the YARN architecture
+
+HDFS has two components: Map() and Reduce()
+
+Hadoop Processing – MapReduce
+
+what map() will do is basically do is give index the all the words or text inputs and then 
+reduce() will see which words are getting repeated and then it will see which words are being repeated.
+So reduce takes care of summarizing or giving us the output when we pass the comment 
+
+then it has to be understood by the name node and then go hit the data nodes and 
+then it has to apply the reduce() and all of this is ultimately happening on the disk storage which is HDFS so it will be a bit slow. it is a time consuming process.
+
+Good point of hadoop architecture is that there will always be a backup of data 
+because each data node has three clones of it for backup so when one goes corrupt there is still two more datanodes of the same data in backup. 
+
+Map phase:Input data is split into smaller parts. Processed in parallel.
+Reduce phase:Aggregates output from map phase.
+
+Prefered in banking sectors where data is crucial and cant be lost 
+It is good but when we consider the drawback it is slow. So that is when people came up with Spark architecture. 
+
+Spark also has HDFS but instead of having map() and reduce() , it will use in memory processing which is the RAM memory itself instead of the disk operations. 
+So the time of disk I/O is reduced in parallel processing . Spark performs operations using DAG (Directed Acyclic Graph).
+
+
+Spark will have Driver Program - controls execution.
+the second is cluster Manager - allocates resources. 
+third is executers - perform computations.
+
+Spark uses RDD (resilent Distributed datasets ) a good example is the Dataframe that we import from Pandas in our ram memory for doing computation. 
+Cluster manager allocates the resources (YARN , Kubernetes )
+
+so Hadoop is disk based operations and when it comes to Spark it is happening in the Ram memory which is RDD architecture. So Spark is faster than Hadoop. Spark is also cost effecient . 
+
+We got lost for about 20 minutes in answering questions of other students doubts which were mainly the difference between the cluster manager in Spark and also the master/name node in Hadoop.
+
+So example is for fraud detection and where the computation speed is must and so if we have to consider banking operations where a users OTP is being hacked 
+so we need to be implementing Spark architecture because if we use Hadoop then it will take a lot of time to do the disk I/O operations and slow down the process till the time the fraud has already taken place 
+and Hadoop will be just busy doing disk I/O operations. So we implement spark architecture over there. 
+
+Snowflake and NoSQL are built on Spark architecture but SQL is based on Hadoop architecture. 
+We learnt Data masking and encryption at rest and encryption on network like SSL and TLS on HTTPS protocols. 
+
+Data quality and testing done by the analysts to maintain and check the integrity of data. 
+Data consumption the final layer where we use PowerBI or Tableau or other summarizing or reporting or data visualization sofwares. 
+Data in the production stage has to be exposed via creating a fastAPI or Flask to the vendor 
+where they can use the data and thats where you keep the development environment separate from the production environment. 
+Real-time data engineering is something that has to be orchestrated on a live stream and in real time. 
+
+Hadoop vs Spark
+Hadoop	                         Spark
+Disk-based processing	           In-memory processing
+Slower execution	               Faster execution
+High fault tolerance	           High performance
+Uses MapReduce	                 Uses DAG execution
