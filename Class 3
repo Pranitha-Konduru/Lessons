@@ -1,0 +1,196 @@
+whats databse? 
+A database is an organized collection of data, stored and retrieved digitally from a remote or local computer system. 
+Databases can be vast and complex, and such databases are developed using fixed design and modeling approaches. 
+
+whats database management system?  DBMS
+It stores the data in a file format. DBMS is used to connect to the database servers. 
+RDBS: It is a type of software that is used to maintain and manage the database by providing the 2 feautures. 
+a. authorization, b. Security
+
+what is schema?
+A schema is a logical structure inside a database used to organize and manage database objects efficiently. 
+Objects such as tables, views, indexes, functions, and procedures.
+
+whats sql? Structured query languange 
+Structured data is highly organised and stored in a fixed schema, usually in rows and columns. 
+It fits well into relational databases and is easy to query using SQL.
+
+SQL commands are the instructions. it is used to communicate with the database. It is also used to perform specific tasks, functions and queries of data.
+The standard SQL commands to interact with relational databases are CREATE, SELECT, INSERT, UPDATE and DROP.
+There are 5 types of SQL commands: DDL, DML, DCL, TCL and TQL
+
+
+whats ddl,dml,dql, dcl, tcl
+
+DQL (Data Query Language) : Used to retrieve data from databases. (SELECT)
+DDL (Data Definition Language) : Used to create, alter, and delete database objects like tables, indexes, etc. (CREATE, DROP, ALTER, RENAME, TRUNCATE)
+DML (Data Manipulation Language): Used to modify the database. (INSERT, UPDATE, DELETE)
+DCL (Data Control Language): Used to grant & revoke permissions. (GRANT, REVOKE)
+TCL (Transaction Control Language): Used to manage transactions. (COMMIT, ROLLBACK, START TRANSACTIONS, SAVEPOINT)
+
+INSERT INTO: Statement is used to add new rows of data to a table in the database. 
+TRUNCATE: Command is used to delete complete data from an existing table. 
+ALTER: command is used to add, delete or modify columns in an existing table. You should also use the ALTER TABLE command to add and drop various constraints on an existing table. 
+DROP: It is used to delete both the structure and the record stored in the table 
+NOTE − You should be very careful while using this command because once a table is deleted then all the information available in that table will also be lost forever.
+
+
+
+-----------------------
+ #use company_db;
+ 
+#create database 
+CREATE DATABASE company_db;
+-----------------------------------------
+#Create Table 
+
+CREATE TABLE company_db.test_table (
+  id INT,
+  name VARCHAR(100)
+);
+
+SELECT id FROM company_db.test_table;
+ -------------------------------------------------------------
+ #Insert Data into the Table
+ 
+INSERT INTO company_db.test_table (id, name)
+ VALUES
+(1, 'Alice'),
+(2, 'Bob'),
+(3, 'Charlie');
+
+INSERT INTO company_db.test_table (id, name)
+ VALUES
+(5, 5);
+---------------------------------
+#Select 
+
+SELECT * FROM company_db.test_table;
+------------------------------------
+#Alter table 
+ALTER TABLE company_db.test_table
+ADD Email varchar(255);
+---
+ALTER TABLE company_db.test_table
+RENAME COLUMN Email to email_id;
+---------------------------------------------------------------
+# SQL constraints are used to specify rules for data in a table.
+
+#not null and  unique constraints 
+drop table if exists company_db.Persons;
+
+CREATE TABLE company_db.Persons (
+    ID int NOT NULL unique,
+    LastName varchar(255) NOT NULL,
+    FirstName varchar(255),
+    Age int
+);
+
+SELECT * FROM company_db.Persons;
+
+INSERT INTO  company_db.Persons (ID, LastName, FirstName, Age)
+VALUES (1, 'Smith', 'John', 30);
+
+INSERT INTO  company_db.Persons (ID, LastName, FirstName, Age)
+VALUES (2, 'Doe', NULL, NULL);  -- NULLs allowed for FirstName and Age
+
+
+-- This will FAIL because ID = 1 already exists
+INSERT INTO  company_db.Persons (ID, LastName, FirstName, Age)
+VALUES (1, 'Brown', 'Charlie', 25);
+
+
+-- This will FAIL because LastName is NOT NULL
+INSERT INTO company_db.Persons (ID, LastName, FirstName, Age)
+VALUES (3, null, 'Alice', 28);
+--------------------------------------------------------
+
+#PRIMARY KEY -- Uniquely identifies each record in a table. 
+
+ALTER TABLE  company_db.Persons
+ADD PRIMARY KEY (ID);
+-----
+SELECT CONSTRAINT_NAME
+FROM information_schema.TABLE_CONSTRAINTS
+WHERE TABLE_SCHEMA = 'company_db'
+AND TABLE_NAME = 'persons';
+-- AND CONSTRAINT_TYPE = 'PRIMARY KEY';-- 
+-------------------------------------
+
+ALTER TABLE company_db.Persons
+DROP  PRIMARY key ;
+-------
+ALTER TABLE company_db.Persons
+ADD CONSTRAINT PK_Person PRIMARY KEY (ID);
+
+------------------------------------------------------------------------
+#Foregin KEY
+-- A FOREIGN KEY is a field (or collection of fields) in one table, that refers to the PRIMARY KEY in another table.
+-- The table with the foreign key is called the child table, and the table with the primary key is called the referenced or parent table.
+
+CREATE TABLE company_db.Orders (
+    OrderID INT PRIMARY KEY,
+    OrderDate DATE,
+    PersonID INT,
+    FOREIGN KEY (PersonID) REFERENCES Persons(ID)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
+);
+
+INSERT INTO company_db.Orders (OrderID, OrderDate, PersonID)
+VALUES (1001, '2024-06-10', 1);
+
+SELECT * FROM company_db.Orders;
+SeLECT * FROM company_db.persons;
+INSERT INTO company_db.Orders (OrderID, OrderDate, PersonID)
+VALUES (1002, '2024-06-11', 999);  -- PersonID 999 doesn't exist
+
+DELETE FROM company_db.Persons WHERE ID = 1;
+
+select * FROM company_db.persons; -- parent 
+SELECT * FROM company_db.Orders; -- child 
+
+UPDATE company_db.Persons SET ID = 4 WHERE ID = 1;
+	
+------------------------------------------------------------------------------------------------
+#check and default 
+
+CREATE TABLE company_db.employee (
+    ID int NOT NULL ,
+    LastName varchar(255) NOT NULL,
+    FirstName varchar(255),
+    Age int  CHECK (Age>=18),
+	city varchar(255) DEFAULT 'new york'
+);
+
+SELECT * FROM company_db.employee;
+--------
+
+INSERT INTO company_db.employee (ID, LastName, FirstName, Age,city)
+VALUES (4, 'joey', 'tribiani', 21, 'texas');
+
+--------------------------
+# Difference between drop and delete 
+select * FROM company_db.test_table;
+
+select * FROM company_db.test_table where id = 1;
+
+SET SQL_SAFE_UPDATES = 0;
+
+DELETE from company_db.test_table where id = 1; 
+--------------------------------------
+#drop 
+
+DROP TABLE company_db.test_table;
+DROP TABLE  company_db.employee;
+
+# Truncate
+truncate TABLE company_db.test_table;
+--------------------------
+
+DROP TABLE company_db.persons;
+DROP TABLE company_db.Orders;
+
+drop database   company_db;
+
+-------------------------------------------------------------------------------------------------------------------
