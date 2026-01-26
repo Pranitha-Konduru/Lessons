@@ -65,7 +65,7 @@ WHERE email IS NULL OR email LIKE '%.org';
 
 SELECT *
 FROM sakila.film
-WHERE rating IN ('PG', 'G')
+WHERE rating ='PG' OR rating ='G'
 ORDER BY rental_rate DESC;
 
 11. Count how many films exist for each length where the film title starts with 'T' and the count is more than 5.
