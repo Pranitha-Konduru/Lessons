@@ -75,16 +75,16 @@ EXECUTION ORDER :FROM(Table)→ Join → WHERE → GROUP BY → HAVING → SELEC
 
 -------------------------
 Keyword	Meaning
-SELECT *  --     	Get all columns
-COUNT(*)	--      Count rows
-DISTINCT  --    	Only unique values
-WHERE	    ---     Filter rows
-AND	      --      Both conditions must be true
-OR	      --      Either condition can be true
-NOT	      --      Opposite of condition
-BETWEEN	  --      Filter between two values
-LIKE	    --      Filter text with pattern
-IS NULL   --      Check for empty values
-GROUP BY  --      Group rows together
-HAVING	  --      Filter groups
+SELECT *   --     	Get all columns
+COUNT(*)	 --      Count rows
+DISTINCT   --    	Only unique values
+WHERE	     --     Filter rows
+AND	       --      Both conditions must be true
+OR	       --      Either condition can be true
+NOT	       --      Opposite of condition
+BETWEEN	   --      Filter between two values
+LIKE	     --      Filter text with pattern
+IS NULL    --      Check for empty values
+GROUP BY   --      Group rows together
+HAVING	   --      Filter groups
 ORDER BY	 --     Sort results
