@@ -1,56 +1,68 @@
-#'strings'
------
-select title from sakila.film; 
+#Here we are performing different Built In operations on Strings:
 
-SELECT title, LPAD(RPAD(title, 20, '*'),25,'*') AS left_padded
+LPAD,RPAD - It is used to fill up the memory spaces for remaining characters 
+
+SELECT title, RPAD(title, 20, '*'),25,'*') AS Right_padded
 FROM sakila.film
-LIMIT 5;
+LIMIT 5;  ------- Padding is added Right side of the title
 
 SELECT title, LPAD(title, 20, '*') AS left_padded
 FROM sakila.film
-LIMIT 5;
+LIMIT 5; ------- Padding is added Left side of the title
 
------------------------------------------
-#Substring 
+------------------------------------------------------------------------------------------------------------------------------
+#Introduction to Substring function:
+
 SELECT title, SUBSTRING(title, 1,9)  AS short_title 
-FROM sakila.film;
+FROM sakila.film; ----- Title --- start from 1st char upto 9 char 
 
-----------------------
-#concatination
+------------------------------------------------------------------------------------------------------------------------------
+#concatination : Adding of two strings
+
 SELECT CONCAT(first_name, '.', last_name) AS full_name 
-FROM sakila.customer;
+FROM sakila.customer;------It displays full name as first_name.last_name
 
---------------------------
+-------------------------------------------------------------------------------------------------------------------------------
+# Reverse: It is used to reverse text
+
 SELECT title, REVERSE(title) AS reversed_title
 FROM sakila.film
-LIMIT 5;
+LIMIT 5;------------- reverse_title displays reverse text
 
-------------------------------
-#length 
+----------------------------------------------------------------------------------------------------------------------------------
+#length: It displays num of char in the string  
 
 SELECT title, LENGTH(title) AS title_length 
 FROM sakila.film
 WHERE LENGTH(title) =8;
 
--------------------------------------
-#substring with locate 
-select email from sakila.customer;
+------------------------------------------------------------------------------------------------------------------------------------
+#substring with locate: Locate is to find position 
+#LOCATE('@', email): Finds the position of @ in the email string.
+#SUBSTRING(email, LOCATE('@', email) + 1): Extracts the string after @
 
 SELECT email,
        SUBSTRING(email, LOCATE('@', email) +1) AS domain
-FROM sakila.customer;
+FROM sakila.customer; -----------LOCATE('@', email) finds position of '@' in the email
+----SUBSTRING(email, LOCATE('@', email) + 1) here +1 means returns everything after '@'
 
 
 SELECT 
   email,
   substring_index(SUBSTRING(email, LOCATE('@', email) + 1), '.', -1) AS domain
 FROM 
-  sakila.customer;
+  sakila.customer;------------ return org from 'MARY.SMITH@sakilacustomer.org'
 
 #substring_index
-select substring_index(email,'@', 1) from sakila.customer;
+select substring_index(email,'@', 1) from sakila.customer;----------- return 'MARY.SMITH'
 
---------------------------
+---------------------------------------------------------------------------------------------------------------------------------------
+---UPPER / LOWER :
+---UPPER(title) → converts the title to all uppercase letters.
+---lower(title) → converts the title to all lowercase letters.
+---LIKE '%LOVELY%' → finds titles that contain the word 'LOVELY' anywhere. 
+---LIKE '%MAN' → finds titles that end with 'MAN'.
+
 SELECT title, UPPER(title),lower(title)
 FROM sakila.film
 WHERE UPPER(title) LIKE '%LOVELY%' or UPPER(title) LIKE '%MAN';
@@ -58,16 +70,15 @@ WHERE UPPER(title) LIKE '%LOVELY%' or UPPER(title) LIKE '%MAN';
 select title, lower(title) as lower_titles
 FROM sakila.film;
 
---------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------
+
 SELECT LEFT(title, 2) AS first_letter, right(title,3) as last_letter,  COUNT(*) AS film_count
 FROM sakila.film
 GROUP BY LEFT(title, 2), right(title,3)
 ORDER BY film_count DESC;
------
-SELECT LEFT(title,2) AS first_letter, right(title, 3) as last_letter, title 
-from sakila.film;
 
--------------------
+----------------------------------------------------------------------------------------------------------------------------------------
+
 SELECT last_name,
        CASE 
            WHEN LEFT(last_name, 1) BETWEEN 'A' AND 'M' THEN 'Group A-M'
@@ -76,20 +87,21 @@ SELECT last_name,
        END AS group_label
 FROM sakila.customer;
 
----------------
-
+--------------------------------------------------------------------------------------------------------------------------------------
+# returns a new column called cleaned_title capital letter 'A' in the title is replaced by 'x'.
 SELECT title, REPLACE(title, 'A', 'x') AS cleaned_title
 FROM sakila.film
 WHERE title LIKE '%' '%';
  
+-------------------------------------------------------------------------------------------------------------------------------------
+#not contains 3 consecutive vowels 
 
------------------
--- not contains 3 consecutive vowels 
 SELECT customer_id, last_name
 FROM sakila.customer
 WHERE last_name REGEXP '[^aeiouAEIOU]{3}'; 
 
--- ends with vowel
+--$ ends with vowel
+
 SELECT lower(title)
 FROM sakila.film
 WHERE title REGEXP '[aeiouAEIOU]$';
@@ -97,8 +109,7 @@ WHERE title REGEXP '[aeiouAEIOU]$';
 
 select title, right(title,2)
 FROM sakila.film
-WHERE title REGEXP '[eE]$' 
-;
+WHERE title REGEXP '[eE]$';
 
 -- count 
 
@@ -113,16 +124,11 @@ FROM sakila.film
 WHERE title REGEXP '[Ee]$';
 
 
---------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------
 #math 
 
-SELECT title, rental_rate, rental_rate ^ 3 AS double_rate   -- debug why its allwoing string + integer
+SELECT title, rental_rate, rental_rate ^ 3 AS double_rate   
 FROM sakila.film;
-------------------------
----------------
-#math 
-
--- select amount,CAST(amount AS signed) AS amount_str from sakila.payment;  -- check type casting in mysql 
 
 
 SELECT customer_id,
@@ -132,11 +138,7 @@ SELECT customer_id,
        
 FROM sakila.payment
 GROUP BY customer_id;
-------------
-select rental_duration,cost_efficiency_dup1 from sakila.film;
-
-select rental_duration from sakila.film;
-
+----------------------------------------------------------------------------------------------------------------------------------------
 
 ALTER TABLE sakila.film
 ADD COLUMN cost_efficiency_dup1 DECIMAL(6,2);
@@ -148,29 +150,30 @@ UPDATE sakila.film
 SET cost_efficiency_dup1 = rental_duration * 2
 WHERE length IS NOT NULL;
 
-
-select * from sakila.film;
----------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------
 
 SELECT customer_id, (RAND() * 100), FLOOR(RAND() * 100) AS random_score
 FROM sakila.customer
-LIMIT 5;
+LIMIT 5; -----Random number
 
+--------------------------------------------------------------------------------------------------------------------------------------
 
-----
 SELECT film_id,rental_duration, POWER(rental_duration, 2) AS squared_duration
 FROM sakila.film
-LIMIT 5;
+LIMIT 5; ------Power
 
-------
+--------------------------------------------------------------------------------------------------------------------------------------
+
 SELECT film_id,length, MOD(length, 60) AS minutes_over_hour
-FROM sakila.film;
--------------
+FROM sakila.film;--------Remainder
+---------------------------------------------------------------------------------------------------------------------------------------
+
 SELECT rental_rate, CEIL(rental_rate) AS ceil_value, FLOOR(rental_rate) AS floor_value
-FROM sakila.film;
-----------
+FROM sakila.film;---------Round off to the nearest value (4.00 -- 5)
+-------------------------------------------------------------------------------------------------------------------------------
+
 SELECT rental_rate, ROUND(replacement_cost / rental_rate, 0),ROUND(replacement_cost / rental_rate, 1) AS ratio
-FROM sakila.film;
+FROM sakila.film;-------Round (21.2 --- 21)
 
 ---------------------------------
 #date diff 
@@ -220,36 +223,3 @@ SELECT CONCAT('Today is: ', CURDATE()) AS message;
 SELECT CONCAT('Today is: ', now()) AS message;
 
 SELECT NOW(), CURDATE(), CURRENT_TIME;
-
---------------------------------------------------------
-#casting 
-
-ALTER TABLE sakila.payment
-ADD COLUMN amount_str VARCHAR(20);
-
-SET SQL_SAFE_UPDATES = 0;
-
-UPDATE sakila.payment
-SET amount_str = CAST(amount AS CHAR);
-
-
-select * from sakila.customer;
-
-select * from sakila.payment;
-
-ALTER TABLE sakila.payment
-drop COLUMN amount_str;
-
-----------------
-SELECT amount, amount_Str, amount + 10 AS numeric_add,
-       amount_str + 10 AS string_add
-FROM sakila.payment
-LIMIT 5;
--------------
-
-SHOW COLUMNS FROM sakila.payment;
-SELECT CAST('2017-08-25' AS datetime);
----------------
-
-
-
